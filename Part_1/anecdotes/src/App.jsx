@@ -1,15 +1,33 @@
 import { useState } from 'react'
 
-const Button = ({len, onClick}) => {
-  let randNum = Math.floor((Math.random()*len))
+const ButtonRandAnecdote = ({len, onClick}) => {
+  
   return (
     <>
-      <br></br>
-      <button onClick={() => onClick(randNum)}>next anecdote</button>
+      <button onClick={() => {
+        let randNum = Math.floor((Math.random()*len))
+        onClick(randNum)}}>
+        next anecdote</button>
     </>
   )
 }
 
+const ButtonVote = ({index, onClick}) => {
+
+  return (
+    <>
+      <br></br>
+      <button onClick={() => onClick(index)}>vote</button>
+    </>
+  )
+}
+
+const VoteDisplay = ({voteNum}) => {
+  if(voteNum == 1){
+    return <p>has {voteNum} vote</p>
+  }
+  return <p>has {voteNum} votes</p>
+}
 
 
 const App = () => {
@@ -25,13 +43,21 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
 
   const randQuote = (index) => setSelected(index) 
+  const addingVote = (index) => {
+    const newVotes = [...votes]
+    newVotes[index] +=1
+    setVotes(newVotes)
+  }
 
   return (
     <div>
       {anecdotes[selected]}
-      <Button len = {anecdotes.length} onClick={randQuote}/>
+      <VoteDisplay voteNum={votes[selected]} />
+      <ButtonVote index={selected} onClick={addingVote} />
+      <ButtonRandAnecdote len = {anecdotes.length} onClick={randQuote}/>
     </div>
   )
 }
