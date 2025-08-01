@@ -29,6 +29,21 @@ const VoteDisplay = ({voteNum}) => {
   return <p>has {voteNum} votes</p>
 }
 
+const PopularDisplay = ({popular, votes, anecdotes}) => {
+  const sum = votes.reduce((acc, val) => acc + val, 0);
+  if(sum == 0){
+    return (
+      <p>Vote to show the most popular anecdote</p>
+    )
+  }
+  return (
+    <>
+      <h2>Anecdote with most Votes</h2>
+      {anecdotes[popular]} <br/>
+      has {votes[popular]} votes
+    </>
+  )
+}
 
 const App = () => {
   const anecdotes = [
@@ -44,20 +59,25 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
+  const [popular, setPopular] = useState(0)
 
   const randQuote = (index) => setSelected(index) 
   const addingVote = (index) => {
     const newVotes = [...votes]
     newVotes[index] +=1
     setVotes(newVotes)
+    setPopular(newVotes.indexOf(Math.max(...newVotes)))
   }
 
   return (
     <div>
+      <h2>Anecdote of the day</h2>
       {anecdotes[selected]}
       <VoteDisplay voteNum={votes[selected]} />
       <ButtonVote index={selected} onClick={addingVote} />
       <ButtonRandAnecdote len = {anecdotes.length} onClick={randQuote}/>
+      <PopularDisplay votes={votes} popular={popular} anecdotes={anecdotes}/>
+
     </div>
   )
 }
