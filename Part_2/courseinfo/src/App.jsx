@@ -27,15 +27,8 @@ const Course = ({course}) => {
       <Header course={name} />
 
       <Content parts={parts} />
-    
-      <Total
-        
-        total={
-          parts[0].exercises +
-          parts[1].exercises +
-          parts[2].exercises
-        }
-      />
+
+      <Total  total={parts.reduce((acc, curr) => acc+curr.exercises,0 )} />
     </div>
   )
   
@@ -60,7 +53,7 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
-      }
+      }    
     ]
   }
 
