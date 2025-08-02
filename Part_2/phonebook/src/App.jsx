@@ -1,32 +1,48 @@
-import { useState } from 'react'
+import { use, useState } from 'react'
+let counter = 0;
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
-  ]) 
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
+  ])
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
+  const [filterVal, setFilterVal] = useState('')
 
-  const addName = (event) => {
+  const addPerson = (event) => {
     event.preventDefault()
-    const newNameObject = {name: newName}
-    if(!persons.some(person => JSON.stringify(person) === JSON.stringify(newNameObject))){
-      setPersons(persons.concat({name: newName}))
+    if(!/^\d+$/.test(newNumber.replace(/-/g, ""))){
+      alert(`number section may only contain numbers and dashes`)
+    }
+    const personObject = {name: newName, number: newNumber}
+    if(!persons.some(person => JSON.stringify(person) === JSON.stringify(personObject))){
+      setPersons(persons.concat({name: newName, number: newNumber}))
       setNewName('')
+      setNewNumber('')
     }
     else{
       alert(`${newName} is already added to phonebook`)
     }
   } 
 
+  const handleFilterChange = event => setFilterVal(event.target.value)
   const handleNewNameChange = event => setNewName(event.target.value)
-  
+  const handleNewNumberChange = event => setNewNumber(event.target.value)
+
+  const personsToShow = filterVal === '' ? persons : persons.filter(person => person.name.toLowerCase().includes(filterVal.toLowerCase()))
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addName}>
+      filter shown with<input placeholder='filter by name' value={filterVal} onChange={handleFilterChange}/>
+      <form onSubmit={addPerson}>
         <div>
-          name: <input value={newName} placeholder={'enter a new name'} onChange={handleNewNameChange}/>
+          name: <input value={newName} placeholder={'enter name'} onChange={handleNewNameChange}/>
+          <br></br>
+          number: <input value={newNumber} placeholder={'enter phone number'} onChange={handleNewNumberChange}/>
         </div>
         <div>
           <button  type="submit">add</button>
@@ -34,7 +50,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <ul>
-        {persons.map((person)=> <li key={person.name}>{person.name}</li>)}
+        {personsToShow.map((person)=> <li key={counter++}>{person.name} {person.number}</li>)}
       </ul>
     </div>
   )
