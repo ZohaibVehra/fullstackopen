@@ -1,10 +1,11 @@
+let todoCounter = 1;
+
+
 const Header = (props) => <h1>{props.course}</h1>
 
-const Content = (props) => (
+const Content = ({parts}) => (
   <div>
-    <Part part={props.parts[0]} />
-    <Part part={props.parts[1]} />
-    <Part part={props.parts[2]} />
+    {parts.map((part) => <Part key={todoCounter++} part={part} /> )}
   </div>
 )
 
@@ -19,11 +20,16 @@ const Total = (props) => <p>Number of exercises {props.total}</p>
 const Course = ({course}) => {
   const {name, parts} = course
   
+
+
   return(
     <div>
       <Header course={name} />
+
       <Content parts={parts} />
+    
       <Total
+        
         total={
           parts[0].exercises +
           parts[1].exercises +
