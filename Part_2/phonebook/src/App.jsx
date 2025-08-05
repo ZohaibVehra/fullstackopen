@@ -3,7 +3,7 @@ import Filter from './components/Filter'
 import PersonsForm from './components/PersonsForm'
 import PersonsList from './components/PersonsList'
 import personService from './services/persons'
-
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -11,6 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterVal, setFilterVal] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   useEffect( () => {
     personService.getAll()
@@ -41,15 +42,23 @@ const App = () => {
             return personService.update(nameMatch.id, personObject)
             .then(updatedPerson => {
               setPersons(persons.map(person => updatedPerson.id === person.id ? updatedPerson : person))
+              setNotificationMessage(`${newName} had their number updated`)
+              setTimeout(() => {
+                setNotificationMessage(null)
+              }, 3000)
             })
           }
           return Promise.resolve()//have to return some promise or the .then later breaks
         }
         : () => {
           return personService.create(personObject)
-            .then( returnedPerson =>
+            .then(returnedPerson => {
               setPersons(persons.concat(returnedPerson))
-            )
+              setNotificationMessage(`${newName} was added`)
+              setTimeout(() => {
+                setNotificationMessage(null)
+              }, 3000)
+            })
         }
 
         actionToDo().then(() => {
@@ -78,9 +87,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} />
       <Filter filterVal={filterVal} handleFilterChange={handleFilterChange} />
 
-      <h3>Add a new</h3>
+      <h3>Add a new person</h3>
 
       <PersonsForm addPerson={addPerson} newName={newName} handleNewNameChange={handleNewNameChange} newNumber={newNumber} handleNewNumberChange={handleNewNumberChange} />
 
