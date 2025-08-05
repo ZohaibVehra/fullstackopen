@@ -24,20 +24,37 @@ const App = () => {
     }
     else{
       const personObject = {name: newName, number: newNumber}
-      if(!persons.some(person => JSON.stringify(person) === JSON.stringify(personObject))){
-        personService.create({name: newName, number: newNumber}).then(returnedPerson => {
-          setPersons(persons.concat(returnedPerson))
+      const exactMatch = persons.some(person => person.name === personObject.name && person.number === personObject.number)
+      
+      
+      if(exactMatch){
+        alert(`${newName} already added to phonebook`)
+        return
+      }
+
+      const nameMatch = persons.find(person => person.name === personObject.name)
+      
+      const actionToDo = nameMatch ?
+        () => {
+          return personService.update(nameMatch.id, personObject)
+            .then(updatedPerson => {
+              setPersons(persons.map(person => updatedPerson.id === person.id ? updatedPerson : person))
+            })
+        }
+        : () => {
+          return personService.create(personObject)
+            .then( returnedPerson =>
+              setPersons(persons.concat(returnedPerson))
+            )
+        }
+
+        actionToDo().then(() => {
           setNewName('')
           setNewNumber('')
-        })
-        .catch(err => console.log(err))
-        
-      }
-      else{
-        alert(`${newName} is already added to phonebook`)
-      }
-    }
-  } 
+        }).catch( err => console.log(err) )
+    }   
+  }
+  
 
   const handleFilterChange = event => setFilterVal(event.target.value)
   const handleNewNameChange = event => setNewName(event.target.value)
