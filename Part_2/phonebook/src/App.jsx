@@ -2,8 +2,7 @@ import {useEffect, useState } from 'react'
 import Filter from './components/Filter'
 import PersonsForm from './components/PersonsForm'
 import PersonsList from './components/PersonsList'
-import axios from 'axios'
-
+import personService from './services/persons'
 
 
 
@@ -14,9 +13,8 @@ const App = () => {
   const [filterVal, setFilterVal] = useState('')
 
   useEffect( () => {
-    axios
-      .get('http://localhost:3002/persons')
-      .then(response => setPersons(response.data))
+    personService.getAll()
+      .then(personsArr => setPersons(personsArr))
   } ,[])
 
   const addPerson = (event) => {
@@ -24,15 +22,20 @@ const App = () => {
     if(!/^\d+$/.test(newNumber.replace(/-/g, ""))){
       alert(`number section may only contain numbers and dashes`)
     }
-    const personObject = {name: newName, number: newNumber}
-    if(!persons.some(person => JSON.stringify(person) === JSON.stringify(personObject))){
-      axios.post('http://localhost:3002/persons', {name: newName, number: newNumber})
-      setPersons(persons.concat({name: newName, number: newNumber}))
-      setNewName('')
-      setNewNumber('')
-    }
     else{
-      alert(`${newName} is already added to phonebook`)
+      const personObject = {name: newName, number: newNumber}
+      if(!persons.some(person => JSON.stringify(person) === JSON.stringify(personObject))){
+        personService.create({name: newName, number: newNumber}).then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+        .catch(err => console.log(err))
+        
+      }
+      else{
+        alert(`${newName} is already added to phonebook`)
+      }
     }
   } 
 
