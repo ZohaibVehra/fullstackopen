@@ -1,12 +1,15 @@
-let counter = 0;
+const PersonRender = ({person, delPerson}) => {
+  return(
+    <li>{person.name} {person.number} <button onClick={delPerson}>delete</button></li>
+  )
+}
 
-const PersonRender = ({person}) => <li>{person.name} {person.number}</li>
-
-const PersonsList = ({personsToShow}) => {
-
+const PersonsList = ({personsToShow, delPerson}) => {
   return (
     <ul>
-        {personsToShow.map((person)=> <PersonRender key={counter++} person={person}/>)}
+        {personsToShow.map((person)=> 
+          <PersonRender key={person.id} person={person} delPerson={()=> delPerson(person.id, person.name)}/>
+        )}
     </ul>
   )
 }
