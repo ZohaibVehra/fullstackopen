@@ -46,6 +46,12 @@ const App = () => {
               setTimeout(() => {
                 setNotificationMessage(null)
               }, 3000)
+            }).catch(error => {
+              setNotificationMessage(`Information of '${newName}' has already been removed from server`)
+              setPersons(persons.filter(person => person.id !== nameMatch.id))
+              setTimeout(() => {
+                setNotificationMessage(null)
+              }, 3000)
             })
           }
           return Promise.resolve()//have to return some promise or the .then later breaks
