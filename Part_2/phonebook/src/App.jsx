@@ -26,6 +26,7 @@ const App = () => {
     }
     const personObject = {name: newName, number: newNumber}
     if(!persons.some(person => JSON.stringify(person) === JSON.stringify(personObject))){
+      axios.post('http://localhost:3002/persons', {name: newName, number: newNumber})
       setPersons(persons.concat({name: newName, number: newNumber}))
       setNewName('')
       setNewNumber('')
