@@ -36,10 +36,14 @@ const App = () => {
       
       const actionToDo = nameMatch ?
         () => {
-          return personService.update(nameMatch.id, personObject)
+          let conf = window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)
+          if (conf){
+            return personService.update(nameMatch.id, personObject)
             .then(updatedPerson => {
               setPersons(persons.map(person => updatedPerson.id === person.id ? updatedPerson : person))
             })
+          }
+          return Promise.resolve()//have to return some promise or the .then later breaks
         }
         : () => {
           return personService.create(personObject)
