@@ -1,20 +1,22 @@
 import { useEffect } from "react"
 
+const CountryRender = ({ countryName, buttonFunc }) => {
+    return (
+        <p>{countryName} <button onClick={() => buttonFunc(countryName)}>show</button></p>
+    );
+};
 
-const CountriesMatched = ({currentCountry, allCountries, valid, validateCountry}) => {
+
+const CountriesMatched = ({currentShown, currentCountry, allCountries, validateCountry, handleShow}) => {
 
     const matches = allCountries.filter(country => country.toLowerCase().includes(currentCountry.toLowerCase()));
 
     useEffect(() => {
-        if (matches.length === 1 && currentCountry.toLowerCase()=== matches[0].toLowerCase()) {
-        valid(true)
-        validateCountry(currentCountry)
-        } else {
-        valid(false)
-        validateCountry('')
-        }
+        if(!matches.includes(currentShown) || matches.length > 10){       
+        validateCountry('')    
+    }
     }, [matches])
-
+    
     if(currentCountry === ''){
         return
     }
@@ -26,7 +28,7 @@ const CountriesMatched = ({currentCountry, allCountries, valid, validateCountry}
 
     return(
         <div>
-            {matches.map( countryName => <p key={countryName}>{countryName}</p>)}
+            {matches.map( countryName => <CountryRender key={countryName} countryName={countryName} buttonFunc={handleShow} />)}
         </div>
     )
 }

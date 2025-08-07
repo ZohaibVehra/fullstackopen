@@ -9,14 +9,16 @@ function App() {
 
   const [allCountries, setAllCountries] = useState([])  
   const [currentCountry, setCurrentCountry] = useState('')
-  const [validCountry, setValidCountry] = useState(false)
   const [validatedCountry, setValidatedCountry] = useState('')
  
 
   //handle user typing into input for country name
   const handleChange = event => setCurrentCountry(event.target.value) 
-  const valid = (input) => input ? setValidCountry(true) : setValidCountry(false)
   const validateCountry = countryName =>  setValidatedCountry(countryName)
+
+  //handles show button click
+  const handleShow = countryName => setValidatedCountry(countryName)
+
   //gets all countries, runs once after render
   useEffect(() => {countriesService.getAll().then(
     data => {
@@ -32,9 +34,9 @@ function App() {
   return (
     <>
       <Form currentCountry={currentCountry} handleChange={handleChange}/>
-      <CountriesMatched currentCountry={currentCountry}  allCountries={allCountries} valid={valid} validateCountry={validateCountry} />
+      <CountriesMatched handleShow={handleShow} currentCountry={currentCountry}  allCountries={allCountries} validateCountry={validateCountry} currentShown={validatedCountry} />
 
-      <CountryInfo valid={validCountry} country={validatedCountry}/>
+      <CountryInfo  country={validatedCountry}/>
       
     </>
   )
