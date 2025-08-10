@@ -21,7 +21,6 @@ const ButtonVote = ({index, onClick}) => {
     </>
   )
 }
-
 const VoteDisplay = ({voteNum}) => {
   if(voteNum == 1){
     return <p>has {voteNum} vote</p>

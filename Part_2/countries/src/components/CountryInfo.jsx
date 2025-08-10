@@ -10,21 +10,22 @@ const LanguagesMapped = ({languages}) => {
     )
 }
 
-const CountryInfo = ({country}) => {
+const CountryInfo = ({valid, country}) => {
+    
     
     const [countryInfo, setCountryInfo] = useState(null)
     
     useEffect(() =>{
-        if (country === '') {
-            setCountryInfo(null)
+        if (!valid) {
+            setCountryInfo('')
             return
         }
 
         countriesService.getCountry(country).then(countryInfo => setCountryInfo(countryInfo))
-    }, [country])
+    }, [valid, country])
 
 
-    if (!countryInfo || country === '') return <></>
+    if (!valid || !countryInfo) return <></>
 
     
     let {
