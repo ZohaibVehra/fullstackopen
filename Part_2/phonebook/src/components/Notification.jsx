@@ -11,6 +11,8 @@ const Notification = ({ message}) => {
 
   if(message !== null && message.includes('has already been removed from server')){
     notificationStyle.color = 'red'
+  }else if(message !== null && message.includes('Person validation failed:')){
+    notificationStyle.color = 'red'
   }
 
   if (message === null) {
