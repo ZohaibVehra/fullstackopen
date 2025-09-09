@@ -17,19 +17,19 @@ const favoriteBlog  = (blogs) => {
 
 const mostBlogs = (blogs) => {
 
-  if(blogs.length === 0) return {author: null, blogs: 0}
+  if(blogs.length === 0) return { author: null, blogs: 0 }
 
   const authorMap = new Map()
 
   for(const blog of blogs) {
     if(authorMap.has(blog.author)){
-       authorMap.set(blog.author, authorMap.get(blog.author) + 1)
+      authorMap.set(blog.author, authorMap.get(blog.author) + 1)
     }
     else authorMap.set(blog.author, 1)
   }
 
-  retAuthor = null
-  retBlogs = 0
+  let retAuthor = null
+  let retBlogs = 0
 
   for (const [key, value] of authorMap){
     if(value > retBlogs){
@@ -38,25 +38,25 @@ const mostBlogs = (blogs) => {
     }
   }
 
-  return {author: retAuthor, blogs: retBlogs}
+  return { author: retAuthor, blogs: retBlogs }
 
 }
 
 const mostLikes = (blogs) => {
-  
-  if(blogs.length === 0) return {author: null, likes: 0}
+
+  if(blogs.length === 0) return { author: null, likes: 0 }
 
   const authorMap = new Map()
 
   for(const blog of blogs) {
     if(authorMap.has(blog.author)){
-       authorMap.set(blog.author, authorMap.get(blog.author) + blog.likes)
+      authorMap.set(blog.author, authorMap.get(blog.author) + blog.likes)
     }
     else authorMap.set(blog.author, blog.likes)
   }
 
-  retAuthor = null
-  retLikes = 0
+  let retAuthor = null
+  let retLikes = 0
 
   for (const [key, value] of authorMap){
     if(value > retLikes){
@@ -65,7 +65,7 @@ const mostLikes = (blogs) => {
     }
   }
 
-  return {author: retAuthor, likes: retLikes}
+  return { author: retAuthor, likes: retLikes }
 }
 
 module.exports = {
@@ -73,5 +73,5 @@ module.exports = {
   totalLikes,
   favoriteBlog,
   mostBlogs,
-  mostLikes 
+  mostLikes
 }
