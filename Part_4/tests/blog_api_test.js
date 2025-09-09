@@ -92,6 +92,43 @@ test('verify post to /api/blogs returns 400 if no url given', async () => {
 
 })
 
+test('deleting a blog', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const idToDelete = blogsAtStart[0].id
+
+  await api
+    .delete(`/api/blogs/${idToDelete}`)
+    .expect(204)
+
+  const blogsInDb = await helper.blogsInDb()
+  const ids = blogsInDb.map(blog => blog.id)
+  assert(!ids.includes(idToDelete))
+  assert.strictEqual(blogsInDb.length, helper.initialBlogs.length-1)
+})
+
+test.only('updating a blogs properties works', async () => {
+  //note while 4.14 specifies it mostly needs to update likes,
+  //this test will test updating all properties
+  const blogs = await helper.blogsInDb()
+  const blogToEdit = blogs[0]
+  blogToEdit.author = 'edited author'
+  blogToEdit.url = 'edited url'
+  blogToEdit.title = 'edited title'
+  blogToEdit.likes = 999
+
+  const updatedBlogObj = await api
+    .put(`/api/blogs/${blogToEdit.id}`)
+    .send(blogToEdit)
+    .expect(200)
+
+  const updatedBlog = updatedBlogObj.body
+
+  assert.strictEqual(updatedBlog.title, 'edited title')
+  assert.strictEqual(updatedBlog.author, 'edited author')
+  assert.strictEqual(updatedBlog.url, 'edited url')
+  assert.strictEqual(updatedBlog.likes, 999)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
