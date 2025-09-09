@@ -30,6 +30,25 @@ test('verify unique identifier property is named id', async () => {
   })
 })
 
+test.only('verify post to /api/blogs creates new blog', async () => {
+  const newBlog = {
+    title: 'test addition',
+    author: 'fake name',
+    url: 'http://example.com/random',
+    likes: 13
+  }
+
+  const createdBlog = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsInDb = await helper.blogsInDb()
+  assert.strictEqual(blogsInDb.length, helper.initialBlogs.length + 1)
+  assert.strictEqual(createdBlog.body.title, 'test addition')
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
