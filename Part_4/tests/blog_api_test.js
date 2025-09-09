@@ -49,7 +49,7 @@ test('verify post to /api/blogs creates new blog', async () => {
   assert.strictEqual(createdBlog.body.title, 'test addition')
 })
 
-test.only('verify post to /api/blogs creates new blog with likes = 0 if not specified', async () => {
+test('verify post to /api/blogs creates new blog with likes = 0 if not specified', async () => {
   const newBlog = {
     title: 'test addition',
     author: 'fake name',
@@ -64,6 +64,32 @@ test.only('verify post to /api/blogs creates new blog with likes = 0 if not spec
 
   console.log(createdBlog.body)
   assert.strictEqual(createdBlog.body.likes, 0)
+})
+
+test('verify post to /api/blogs returns 400 if no title given', async () => {
+  const newBlog = {
+    author: 'fake name',
+    url: 'http://example.com/random'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+})
+
+test('verify post to /api/blogs returns 400 if no url given', async () => {
+  const newBlog = {
+    author: 'fake name',
+    title: 'fake title'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
 })
 
 after(async () => {
