@@ -62,7 +62,6 @@ test('verify post to /api/blogs creates new blog with likes = 0 if not specified
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-  console.log(createdBlog.body)
   assert.strictEqual(createdBlog.body.likes, 0)
 })
 
@@ -106,7 +105,7 @@ test('deleting a blog', async () => {
   assert.strictEqual(blogsInDb.length, helper.initialBlogs.length-1)
 })
 
-test.only('updating a blogs properties works', async () => {
+test('updating a blogs properties works', async () => {
   //note while 4.14 specifies it mostly needs to update likes,
   //this test will test updating all properties
   const blogs = await helper.blogsInDb()
