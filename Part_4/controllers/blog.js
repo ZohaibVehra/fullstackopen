@@ -1,17 +1,29 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
-
-blogsRouter.get('/', (request, response) => {
-  Blog.find({}).then((blogs) => {
-    response.json(blogs)
-  })
+blogsRouter.get('/', async (request, response) => {
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
+  response.json(blogs)
 })
 
 blogsRouter.post('/', async (request, response) => {
-  const blog = new Blog(request.body)
+  const { title, url, likes } = request.body
+
+  const blog = new Blog({
+    title,
+    url,
+    likes,
+    user: '68c2e4dc77c86e542a31d749'
+  })
+
+  const user = await User.findById('68c2e4dc77c86e542a31d749')
+  if(!user) return response.status(400).json({ error: 'userId missing or not vlaid' })
 
   const savedBlog = await blog.save()
+
+  user.blogs = user.blogs.concat(savedBlog._id)
+  await user.save()
   response.status(201).json(savedBlog)
 })
 
