@@ -1,5 +1,18 @@
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
+const initialUsers = [
+  {
+    username: 'user1',
+    password: 'pass1',
+    name: 'firstname'
+  },
+  {
+    username: 'user2',
+    password: 'pass2',
+    name: 'secondname'
+  }
+]
 const initialBlogs = [
   {
     title: 'Understanding Async/Await in JavaScript',
@@ -26,5 +39,9 @@ const blogsInDb = async () => {
   return blogs.map(blog => blog.toJSON())
 }
 
+const usersInDb = async () => {
+  const users = await User.find({})
+  return users.map(user => user.toJSON())
+}
 
-module.exports = { initialBlogs, blogsInDb }
+module.exports = { initialBlogs, blogsInDb, initialUsers, usersInDb }
