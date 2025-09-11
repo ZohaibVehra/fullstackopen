@@ -1,5 +1,5 @@
 const mongoose  = require('mongoose')
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const supertest = require('supertest')
 const app = require('../app')
 const assert = require('node:assert')
@@ -126,6 +126,36 @@ test('updating a blogs properties works', async () => {
   assert.strictEqual(updatedBlog.author, 'edited author')
   assert.strictEqual(updatedBlog.url, 'edited url')
   assert.strictEqual(updatedBlog.likes, 999)
+})
+
+describe('User related tests', () => {
+  test('User generation with a username shorter than 3 characters fails and returns correct error', async () => {
+    const newUser = {
+      username: 'ab',
+      password: 'testpassword'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+
+    assert.ok(result.body.error.includes('shorter than the minimum allowed length'))
+  })
+
+  test('User generation with a password shorter than 3 characters fails and returns correct error', async () => {
+    const newUser = {
+      username: 'testusername',
+      password: 'ab'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+
+    assert.strictEqual(result.body.error, 'password must be at least 3 characters')
+  })
 })
 
 after(async () => {
