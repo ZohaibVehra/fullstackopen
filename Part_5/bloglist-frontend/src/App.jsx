@@ -10,6 +10,14 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
+  useEffect(()=>{
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    if(loggedUserJSON){
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+    }
+  },[])
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -36,6 +44,11 @@ const App = () => {
     <>
       {(!user && <LoginForm {...{username, password, setUsername, setPassword, handleLogin}} />)}
       {(user && <BlogDisplay blogs={blogs} username={user.name}/>)}
+      {user && (
+      <button type="button" onClick={() => {
+          window.localStorage.removeItem('loggedUser')
+          setUser(null)
+        }}>logout</button>)}
     </>
   )
 }
