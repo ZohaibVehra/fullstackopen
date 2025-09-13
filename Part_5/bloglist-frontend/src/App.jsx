@@ -4,6 +4,7 @@ import BlogDisplay from './components/BlogDisplay'
 import LoginForm from './components/LoginForm'
 import loginService from './services/login'
 import AddBlog from './components/AddBlog'
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -14,7 +15,7 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
-
+  const [message, setMessage] = useState(null)
 
   useEffect(()=>{
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -38,7 +39,10 @@ const App = () => {
       setUsername('')
       setPassword('')
     }catch{
-      console.log('bad credentials');
+      setMessage('wrong username or password')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000);
     }
   }
   
@@ -52,12 +56,18 @@ const App = () => {
 
     try{
       await blogService.create(blogObject)
+      setMessage(`a new blog ${title} by ${author} added`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000);
       setTitle('')
       setAuthor('')
       setUrl('')
     }catch{
-      console.log('err on create');
-      
+      setMessage('error when creating new blog')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000);
     }
 
   }
@@ -70,6 +80,7 @@ const App = () => {
 
   return (
     <>
+      <Notification message={message} />
       {(!user && <LoginForm {...{username, password, setUsername, setPassword, handleLogin}} />)}
       {(user && <BlogDisplay blogs={blogs} username={user.name}/>)}
       {(user && <AddBlog {...{title, author, url, setTitle, setAuthor, setUrl, createBlog}} />)}
