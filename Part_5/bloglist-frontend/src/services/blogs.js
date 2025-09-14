@@ -19,4 +19,19 @@ const create = async newObject => {
   return response.data
 }
 
-export default { getAll, setToken, create }
+const addLike = async blogObject => {
+  const config = {
+    headers: {Authorization: token}
+  }
+  const blogClone = { ...blogObject }
+  const id = blogObject.id
+  blogClone.likes += 1
+  blogObject.likes+=1
+  delete blogClone.id
+  blogClone.user = blogClone.user.id
+  console.log('sending', blogObject)
+  const response = await axios.put(baseUrl+'/'+id, blogClone, config )
+  return response.data
+}
+
+export default { getAll, setToken, create, addLike }
