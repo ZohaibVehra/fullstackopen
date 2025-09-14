@@ -7,7 +7,7 @@ const LoginForm = ({ loginUser }) => {
 
   const handleLogin = event => {
     event.preventDefault()
-    loginUser({username, password})
+    loginUser({ username, password })
     setUsername('')
     setPassword('')
   }
@@ -15,17 +15,17 @@ const LoginForm = ({ loginUser }) => {
     <div>
       <h1>log in to application</h1>
       <form onSubmit={handleLogin}>
-          <div>
+        <div>
           <label>
             username
-            <input type="text" value={username} onChange={ ({target})  => setUsername(target.value) } />
+            <input type="text" value={username} onChange={ ({ target })  => setUsername(target.value) } />
           </label>
         </div>
         <div>
-        <label>
+          <label>
           password
-          <input type="text" value={password} onChange={ ({target})  => setPassword(target.value) } />
-        </label>
+            <input type="text" value={password} onChange={ ({ target })  => setPassword(target.value) } />
+          </label>
         </div>
         <button type="submit">login</button>
       </form>

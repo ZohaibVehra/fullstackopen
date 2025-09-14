@@ -1,8 +1,8 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 
 
-const AddBlog = ({createBlog}) => {
+const AddBlog = ({ createBlog }) => {
 
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -26,22 +26,22 @@ const AddBlog = ({createBlog}) => {
   return(
     <div>
       <div>
-      <label>
+        <label>
         title:
-        <input value={title} onChange={ ({target})  => setTitle(target.value)} />
-      </label>
+          <input value={title} onChange={ ({ target })  => setTitle(target.value)} />
+        </label>
       </div>
       <div>
-      <label>
+        <label>
         author:
-        <input value={author} onChange={ ({target})  => setAuthor(target.value)} />
-      </label>
+          <input value={author} onChange={ ({ target })  => setAuthor(target.value)} />
+        </label>
       </div>
       <div>
-      <label>
+        <label>
         url:
-        <input value={url} onChange={ ({target})  => setUrl(target.value)} />
-      </label>
+          <input value={url} onChange={ ({ target })  => setUrl(target.value)} />
+        </label>
       </div>
       <button type="submit" onClick={addNewBlog}>create</button>
     </div>

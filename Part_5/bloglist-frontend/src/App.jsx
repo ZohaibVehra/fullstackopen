@@ -14,7 +14,7 @@ const App = () => {
   const [message, setMessage] = useState(null)
   const loginFormRef = useRef()
 
-  useEffect(()=>{
+  useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if(loggedUserJSON){
       const user = JSON.parse(loggedUserJSON)
@@ -36,28 +36,28 @@ const App = () => {
       setMessage('wrong username or password')
       setTimeout(() => {
         setMessage(null)
-      }, 5000);
+      }, 5000)
     }
   }
-  
+
   const createBlog = async (blogObject) => {
-    
+
     try{
       const createdBlog = await blogService.create(blogObject)
-      console.log(createdBlog);
-      
+      console.log(createdBlog)
+
       setMessage(`a new blog ${createdBlog.title} by ${createdBlog.author} added`)
       setTimeout(() => {
         setMessage(null)
-      }, 5000);
-      console.log('zzz');
-      
+      }, 5000)
+      console.log('zzz')
+
       setBlogs(blogs.concat(createdBlog))
     }catch{
       setMessage('error when creating new blog')
       setTimeout(() => {
         setMessage(null)
-      }, 5000);
+      }, 5000)
     }
 
   }
@@ -65,7 +65,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   const loginForm = () => (
@@ -82,15 +82,15 @@ const App = () => {
   )
 
   const removeBlog = async (blog) => {
-  if (window.confirm(`Remove blog "${blog.title}" by ${blog.author}?`)) {
-    try {
-      await blogService.remove(blog.id)
-      setBlogs(blogs.filter(b => b.id !== blog.id))
-    } catch (error) {
-      console.error('Error deleting blog:', error)
+    if (window.confirm(`Remove blog "${blog.title}" by ${blog.author}?`)) {
+      try {
+        await blogService.remove(blog.id)
+        setBlogs(blogs.filter(b => b.id !== blog.id))
+      } catch (error) {
+        console.error('Error deleting blog:', error)
+      }
     }
   }
-}
 
 
 
@@ -100,19 +100,19 @@ const App = () => {
       <Notification message={message} />
       {(!user && loginForm())}
       {user && (
-      <div>
-        <span>{user.username} logged in </span>
-        <button type="button" onClick={() => {
-          window.localStorage.removeItem('loggedUser')
-          setUser(null)
-          blogService.setToken(null)
-        }}>logout</button>
+        <div>
+          <span>{user.username} logged in </span>
+          <button type="button" onClick={() => {
+            window.localStorage.removeItem('loggedUser')
+            setUser(null)
+            blogService.setToken(null)
+          }}>logout</button>
         </div>
       )}
       <br></br>
       {(user && addBlogForm())}
       {(user && <BlogDisplay delBlog={removeBlog} blogs={blogs} user={user}/>)}
-      
+
     </>
   )
 }
