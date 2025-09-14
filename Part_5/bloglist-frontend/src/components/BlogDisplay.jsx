@@ -4,6 +4,7 @@ const BlogDisplay = ({blogs}) => {
 
   console.log(blogs);
   
+  blogs.sort((a, b) => b.likes - a.likes)
 
     return (
       <div>
