@@ -1,4 +1,28 @@
-const AddBlog = ({title, author, url, setTitle, setAuthor, setUrl, createBlog}) => {
+import { useState } from "react"
+
+
+
+const AddBlog = ({createBlog}) => {
+
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  const addNewBlog = (event) => {
+    event.preventDefault()
+
+    const blogObject = {
+      title: title,
+      author: author,
+      url: url
+    }
+
+    createBlog(blogObject)
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
+
   return(
     <div>
       <div>
@@ -19,7 +43,7 @@ const AddBlog = ({title, author, url, setTitle, setAuthor, setUrl, createBlog}) 
         <input value={url} onChange={ ({target})  => setUrl(target.value)} />
       </label>
       </div>
-      <button type="submit" onClick={createBlog}>create</button>
+      <button type="submit" onClick={addNewBlog}>create</button>
     </div>
   )
 }
