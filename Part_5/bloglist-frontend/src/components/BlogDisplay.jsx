@@ -1,6 +1,6 @@
 import Blog from '../components/Blog'
 
-const BlogDisplay = ({blogs}) => {
+const BlogDisplay = ({blogs, delBlog, user}) => {
 
   console.log(blogs);
   
@@ -10,7 +10,7 @@ const BlogDisplay = ({blogs}) => {
       <div>
         <h2>blogs</h2>
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} delBlog={delBlog} user={user} />
         )}
       </div>
     )  

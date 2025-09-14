@@ -81,6 +81,18 @@ const App = () => {
     </Togglable>
   )
 
+  const removeBlog = async (blog) => {
+  if (window.confirm(`Remove blog "${blog.title}" by ${blog.author}?`)) {
+    try {
+      await blogService.remove(blog.id)
+      setBlogs(blogs.filter(b => b.id !== blog.id))
+    } catch (error) {
+      console.error('Error deleting blog:', error)
+    }
+  }
+}
+
+
 
   return (
     <>
@@ -99,7 +111,7 @@ const App = () => {
       )}
       <br></br>
       {(user && addBlogForm())}
-      {(user && <BlogDisplay blogs={blogs} username={user.name}/>)}
+      {(user && <BlogDisplay delBlog={removeBlog} blogs={blogs} user={user}/>)}
       
     </>
   )
