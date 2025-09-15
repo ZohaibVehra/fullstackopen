@@ -28,19 +28,19 @@ const AddBlog = ({ createBlog }) => {
       <div>
         <label>
         title:
-          <input value={title} onChange={ ({ target })  => setTitle(target.value)} />
+          <input placeholder='title' value={title} onChange={ ({ target })  => setTitle(target.value)} />
         </label>
       </div>
       <div>
         <label>
         author:
-          <input value={author} onChange={ ({ target })  => setAuthor(target.value)} />
+          <input placeholder='author' value={author} onChange={ ({ target })  => setAuthor(target.value)} />
         </label>
       </div>
       <div>
         <label>
         url:
-          <input value={url} onChange={ ({ target })  => setUrl(target.value)} />
+          <input placeholder='url' value={url} onChange={ ({ target })  => setUrl(target.value)} />
         </label>
       </div>
       <button type="submit" onClick={addNewBlog}>create</button>

@@ -50,8 +50,6 @@ test('clicking view button shows url and likes', async () => {
   const mockHandler = vi.fn()
 
   render(<Blog blog={blog} delblog={mockHandler} user={userForBlog}/>)
-  screen.debug()
-
   const button = screen.getByText('view')
   const user = userEvent.setup()
   await user.click(button)
