@@ -1,9 +1,6 @@
 import { useState } from 'react'
 
-
-
 const AddBlog = ({ createBlog }) => {
-
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -14,7 +11,7 @@ const AddBlog = ({ createBlog }) => {
     const blogObject = {
       title: title,
       author: author,
-      url: url
+      url: url,
     }
 
     createBlog(blogObject)
@@ -23,30 +20,46 @@ const AddBlog = ({ createBlog }) => {
     setUrl('')
   }
 
-  return(
+  return (
     <div>
       <div>
         <label>
-        title:
-          <input placeholder='title' value={title} onChange={ ({ target })  => setTitle(target.value)} />
+          title:
+          <input
+            id="title"
+            placeholder="title"
+            value={title}
+            onChange={({ target }) => setTitle(target.value)}
+          />
         </label>
       </div>
       <div>
         <label>
-        author:
-          <input placeholder='author' value={author} onChange={ ({ target })  => setAuthor(target.value)} />
+          author:
+          <input
+            id="author"
+            placeholder="author"
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)}
+          />
         </label>
       </div>
       <div>
         <label>
-        url:
-          <input placeholder='url' value={url} onChange={ ({ target })  => setUrl(target.value)} />
+          url:
+          <input
+            id="url"
+            placeholder="url"
+            value={url}
+            onChange={({ target }) => setUrl(target.value)}
+          />
         </label>
       </div>
-      <button type="submit" onClick={addNewBlog}>create</button>
+      <button id="create" type="submit" onClick={addNewBlog}>
+        create
+      </button>
     </div>
   )
 }
 
 export default AddBlog
-

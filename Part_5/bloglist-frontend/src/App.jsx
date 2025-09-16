@@ -69,13 +69,13 @@ const App = () => {
   }, [])
 
   const loginForm = () => (
-    <Togglable buttonLabel='login' ref={loginFormRef}>
+    <Togglable startOn={true} buttonLabel='login' ref={loginFormRef}>
       <LoginForm loginUser={handleLogin}/>
     </Togglable>
   )
 
   const addBlogForm = () => (
-    <Togglable buttonLabel='create new blog' ref={loginFormRef}>
+    <Togglable startOn={false} buttonLabel='create new blog' ref={loginFormRef}>
       <h1>create new</h1>
       <AddBlog createBlog={createBlog} />
     </Togglable>
@@ -101,7 +101,7 @@ const App = () => {
       {(!user && loginForm())}
       {user && (
         <div>
-          <span>{user.username} logged in </span>
+          <span>{user.name} logged in </span>
           <button type="button" onClick={() => {
             window.localStorage.removeItem('loggedUser')
             setUser(null)

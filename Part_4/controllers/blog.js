@@ -9,13 +9,14 @@ blogsRouter.get('/', async (request, response) => {
 
 
 blogsRouter.post('/', userExtractor, async (request, response) => {
-  const { title, url, likes } = request.body
+  const { title, url, author, likes } = request.body
 
   const user = request.user
 
   const blog = new Blog({
     title,
     url,
+    author,
     likes,
     user: user._id
   })
@@ -23,9 +24,11 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   if(!user) return response.status(400).json({ error: 'userId missing or not vlaid' })
 
   const savedBlog = await blog.save()
-
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
+
+  await savedBlog.populate('user', { username: 1, name: 1 })
+
   response.status(201).json(savedBlog)
 })
 
