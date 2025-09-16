@@ -85,5 +85,57 @@ describe('Blog app', () => {
       await page.locator('#del-button').click()
       await expect(page.getByText('Delete test Title Del Author')).not.toBeVisible()
     })
+
+    test('Only creator of the blog can see the remove button of the blog', async ({ page, request }) => {
+      const firstBlog = { title: 'First Title v2', author: 'First Author Jr', url: 'http://firstblog2.com' }
+
+      await page.getByRole('button', { name: 'new blog' }).click()
+      await page.locator('#title').fill(firstBlog.title)
+      await page.locator('#author').fill(firstBlog.author)
+      await page.locator('#url').fill(firstBlog.url)
+      await page.locator('#create').click()
+      await expect(page.getByText(`${firstBlog.title} ${firstBlog.author}`)).toBeVisible()
+
+      await page.locator('#view-button').click()
+      await expect(page.locator('#del-button')).toBeVisible()
+
+      const anotherUser = { name: 'Another Tester', username: 'another.tester@example.com', password: 'sekret2' }
+      await request.post('http://127.0.0.1:3003/api/users', { data: anotherUser })
+
+      await page.getByRole('button', { name: 'logout' }).click()
+      await page.getByRole('button', { name: 'login' }).click()
+      await page.getByLabel('username').fill(anotherUser.username)
+      await page.getByLabel('password').fill(anotherUser.password)
+      await page.getByRole('button', { name: 'login' }).click()
+
+      await expect(page.getByText(`${firstBlog.title} ${firstBlog.author}`)).toBeVisible()
+      await page.locator('#view-button').click()
+      await expect(page.locator('#del-button')).toHaveCount(0)
+    })
+
+    test('Blogs are in descending order according to likes', async ({ page, request }) => {
+      const loginRes = await request.post('http://127.0.0.1:3003/api/login', {
+        data: { username: 'mluukkai', password: 'salainen' }
+      })
+      const { token } = await loginRes.json()
+
+      const b1 = { title: 'Galaxy Guide', author: 'Ada Star', url: 'http://galaxy.example', likes: 3 }
+      const b2 = { title: 'Aurora Notes', author: 'Ben North', url: 'http://aurora.example', likes: 2 }
+      const b3 = { title: 'Comet Chronicles', author: 'Cara Sky', url: 'http://comet.example', likes: 4 }
+
+      for (const b of [b1, b2, b3]) {
+        await request.post('http://127.0.0.1:3003/api/blogs', {
+          data: b,
+          headers: { Authorization: `Bearer ${token}` }
+        })
+      }
+
+      await page.reload()
+
+      const items = page.locator('.blog')
+      await expect(items.nth(0)).toContainText('Comet Chronicles Cara Sky')
+      await expect(items.nth(1)).toContainText('Galaxy Guide Ada Star')
+      await expect(items.nth(2)).toContainText('Aurora Notes Ben North')
+    })
   })
 })
